@@ -226,96 +226,15 @@ class DextrahKukaAllegroEnvCfg(DirectRLEnvCfg):
 
     # reward weights
     hand_to_object_weight = 1.
-    hand_to_object_sharpness = 5.
     object_to_goal_weight = 5.
+    finger_curl_reg_weight = -0.01
+    lift_weight = 5.0
+
+    hand_to_object_sharpness = 10.
+    object_to_goal_sharpness = 15.
     lift_sharpness = 8.5
 
     # Goal reaching parameters
     object_goal_tol = 0.1  # m
-    success_for_adr = 0.4
-    min_steps_for_dr_change = 5 * int(episode_length_s / (decimation * sim.dt))
-
-    # Object spawning params
+    
     obj_spawn_width = (0.5, 0.8)
-
-    # DR Controls
-    enable_adr = True
-    num_adr_increments = 50
-    starting_adr_increments = 0 # 0 for no DR up to num_adr_increments for max DR
-
-    # Object disturbance wrench fixed params
-    wrench_trigger_every = int(1. / (decimation * sim.dt)) # 1 sec
-    torsional_radius = 0.01  # m
-    hand_to_object_dist_threshold = .3  # m
-
-    # Object scaling
-    object_scale = (0.5, 1.75)
-    deactivate_object_scaling = True
-
-    # These serve to set the maximum value ranges for the different physics parameters
-    adr_cfg_dict = {
-        "num_increments": num_adr_increments,  # number of times you can change the parameter ranges
-        "robot_physics_material": {
-            "static_friction_range": (0.5, 1.2),
-            "dynamic_friction_range": (0.3, 1.0),
-            "restitution_range": (0.8, 1.0)
-        },
-        "joint_stiffness_and_damping": {
-            "stiffness_distribution_params": (0.5, 2.),
-            "damping_distribution_params": (0.5, 2.),
-        },
-        "joint_friction": {
-            "friction_distribution_params": (0., 5.),
-        },
-        "object_physics_material": {
-            "static_friction_range": (0.5, 1.2),
-            "dynamic_friction_range": (0.3, 1.0),
-            "restitution_range": (0.8, 1.0)
-        },
-        "object_scale_mass": {
-            "mass_distribution_params": (0.5, 3.),
-        },
-    }
-
-    # Dictionary of custom parameters for ADR
-    # NOTE: first number in range is the starting value, second number is terminal value
-    adr_custom_cfg_dict = {
-        "object_wrench": {
-            "max_linear_accel": (0., 10.)
-        },
-        "object_spawn": {
-            "x_width_spawn": (0., obj_spawn_width[0]),
-            "y_width_spawn": (0., obj_spawn_width[1]),
-            "rotation": (0., 1.)
-        },
-        "object_state_noise": {
-            "object_pos_noise": (0.0, 0.03), # m
-            "object_pos_bias": (0.0, 0.02), # m
-            "object_rot_noise": (0.0, 0.1), # rad
-            "object_rot_bias": (0.0, 0.08), # rad
-        },
-        "robot_spawn": {
-            "joint_pos_noise": (0., 0.35),
-            "joint_vel_noise": (0., 1.)
-        },
-        "robot_state_noise": {
-            "joint_pos_noise": (0.0, 0.08), # rad
-            "joint_pos_bias": (0.0, 0.08), # rad
-            "joint_vel_noise": (0.0, 0.18), # rad
-            "joint_vel_bias": (0.0, 0.08), # rad
-        },
-        "reward_weights": {
-            "finger_curl_reg": (-0.01, -0.005),
-            "object_to_goal_sharpness": (15., 20.),
-            "lift_weight": (5., 0.)
-        },
-        "pd_targets": {
-            "velocity_target_factor": (1., 0.)
-        },
-        "fabric_damping": {
-            "gain": (10., 20.)
-        },
-        "observation_annealing": {
-            "coefficient": (0., 0.)
-        },
-    }
